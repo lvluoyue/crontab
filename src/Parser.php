@@ -60,9 +60,6 @@ class Parser
      */
     public function parse($crontab_string, $start_time = null)
     {
-        if (! $this->isValid($crontab_string)) {
-            throw new \InvalidArgumentException('Invalid cron string: ' . $crontab_string);
-        }
         $start_time = $start_time ? $start_time : time();
         $date = $this->parseDate($crontab_string);
         if (in_array((int) date('i', $start_time), $date['minutes'])

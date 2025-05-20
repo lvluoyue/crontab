@@ -53,6 +53,9 @@ class Crontab
      */
     public function __construct($rule, $callback, $name = '')
     {
+        if (! $this->isValid($rule)) {
+            throw new \InvalidArgumentException('Invalid cron string: ' . $crontab_string);
+        }
         $this->_rule = $rule;
         $this->_callback = $callback;
         $this->_name = $name;
@@ -156,10 +159,7 @@ class Crontab
                 $now = time();
                 foreach ($times as $time) {
                     $t = $time-$now;
-                    if ($t <= 0) {
-                        $t = 0.000001;
-                    }
-                    Timer::add($t, $cb, null, false);
+                    Timer::add(max($t, 0.000001), $cb, null, false);
                 }
             }
             Timer::add(60 - time()%60, $callback, null, false);
